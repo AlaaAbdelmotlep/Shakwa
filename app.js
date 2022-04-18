@@ -5,7 +5,7 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const body_parser = require("body-parser");
 const cors = require("cors");
-const path = require("path")
+const path = require("path");
 
 // Import Routes
 const reportListRouter = require("./Routers/reportListRouter");

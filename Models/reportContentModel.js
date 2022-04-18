@@ -6,7 +6,7 @@ const schema = new mongoose.Schema(
     _id: Number,
     type_id: {
       type: Number,
-      ref: "report-list",
+      ref: "report_list",
     },
     report_lat: {
       type: Number,
@@ -26,5 +26,5 @@ const schema = new mongoose.Schema(
   { _id: false }
 );
 
-schema.plugin(autoIncrement, { id: "report-content", inc_field: "_id" });
-module.exports = mongoose.model("report-content", schema);
+schema.plugin(autoIncrement, { id: "report_content", inc_field: "_id" });
+module.exports = mongoose.model("report_content", schema);

@@ -40,6 +40,7 @@ exports.deleteReportItem = (req, res, next) => {
   errorHandeler(req);
   ReportListModel.deleteOne({ _id: req.body._id })
     .then((data) => {
+      // TODO: delete related complain
       res.status(200).json({ data: "deleted", body: data });
     })
     .catch((err) => next(err));
