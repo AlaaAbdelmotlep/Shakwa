@@ -11,7 +11,7 @@ router
 			body("report_lat").isFloat().withMessage("location latitude is required"),
 			body("report_long").isFloat().withMessage("location longitude is required"),
 			// TODO: Custom validation for image
-			// body("report_file").isInt().withMessage("report name is required"),
+			// body("reportFile").is.withMessage("report file is required"),
 			body("report_description").isString().withMessage("report description is required"),
 		],
 		reportContentController.addReport
