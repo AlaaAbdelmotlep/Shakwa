@@ -10,23 +10,35 @@ const path = require("path");
 // Import Routes
 const reportListRouter = require("./Routers/reportListRouter");
 const reportContentRouter = require("./Routers/reportContentRouter");
+const accountRouter = require("./Routers/accountRouter")
 
 // Create server
 const app = express();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(path.join(__dirname,"reportFiles"));
+    // console.log(path.join(__dirname, "reportFiles"));
     cb(null, path.join(__dirname, "reportFiles"));
   },
   filename: (req, file, cb) => {
-    console.log("filename",file)
+    // console.log("filename", file);
     cb(
       null,
-      new Date().toLocaleDateString().replace(/\//g, "-") + "-" + file.originalname
+      new Date().toLocaleDateString().replace(/\//g, "-") +
+        "-" +
+        file.originalname
     );
   },
 });
+
+// const fileFilter = (req, file, cb) => {
+//   if (
+//     file.mimetype == "reportFile/jpeg" ||
+//     file.mimetype == "reportFile/jpg" ||
+//     file.mimetype == "reportFile/png"
+//   )
+//     cb(null, true);
+// };
 
 // const limits = { fileSize: 838861 };
 
@@ -43,19 +55,8 @@ mongoose
 app.use(morgan(":method :url"));
 app.use(cors({ origin: true }));
 
-// MW for CORS
-app.use((request, response, next) => {
-  response.header("Access-Control-Allow-Origin", "*");
-  response.header(
-    "Access-Control-Allow-Methods",
-    "GET,POST,DELETE,PUT,OPTIONS"
-  );
-  response.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
-  next();
-});
-
 app.use("/reportFiles", express.static(path.join(__dirname, "reportFiles")));
-app.use(multer({ storage : storage }).array("reportFile"));
+app.use(multer({ storage: storage }).array("reportFile"));
 
 // body-parser
 app.use(body_parser.json());
@@ -64,6 +65,7 @@ app.use(body_parser.urlencoded({ extended: true }));
 // Router EndPoints
 app.use(reportListRouter);
 app.use(reportContentRouter);
+app.use(accountRouter)
 
 // Not Found MW
 app.use((request, response, next) => {

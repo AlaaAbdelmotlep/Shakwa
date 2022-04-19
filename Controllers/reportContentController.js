@@ -1,5 +1,6 @@
 const errorHandeler = require("./errorHandeler.js");
 const ReportContentModel = require("./../Models/reportContentModel");
+const AccountModel = require("./../Models/accountModel");
 
 exports.addReport = (req, res, next) => {
   errorHandeler(req);
@@ -11,10 +12,12 @@ exports.addReport = (req, res, next) => {
         req.files[i].originalname
     );
   }
-  console.log("report controller body", req.body);
-  console.log("report controller file", req.files);
+  // console.log(req.user)
+  // console.log("report controller body", req.body);
+  // console.log("report controller file", req.files);
 
   let object = new ReportContentModel({
+    account: req.user._id,
     type_id: req.body.type_id,
     report_lat: req.body.report_lat,
     report_long: req.body.report_long,
@@ -23,15 +26,19 @@ exports.addReport = (req, res, next) => {
   });
   object
     .save()
-    .then((data) => res.status(200).json({ data }))
-    .catch((error) => next(error));
+
+    .then((data) => {
+      res.status(200).json({ data });
+    })
+    .catch((err) => next(err));
 };
 
 exports.getReport = (req, res, next) => {
   errorHandeler(req);
 
-  ReportContentModel.findById(req.body._id)
+  ReportContentModel.find({ account: req.user._id })
     .populate("type_id")
+    .populate("account")
     .then((data) => {
       res.status(200).json({ message: "Reports", data });
     })
@@ -50,18 +57,21 @@ exports.updateReport = (req, res, next) => {
     );
   }
 
-  ReportContentModel.updateOne(
-    { _id: req.body._id },
-    {
-      $set: {
-        type_id: req.body.type_id,
-        report_lat: req.body.report_lat,
-        report_long: req.body.report_long,
-        reportFile: filesName,
-        report_description: req.body.report_description,
-      },
-    }
-  )
+  // issue : overwrite value => handeled in frontend
+
+  ReportContentModel.find({ account: req.user._id })
+    .updateOne(
+      { _id: req.body._id },
+      {
+        $set: {
+          type_id: req.body.type_id,
+          report_lat: req.body.report_lat,
+          report_long: req.body.report_long,
+          reportFile: filesName,
+          report_description: req.body.report_description,
+        },
+      }
+    )
     .then((data) => {
       res.status(200).json({ message: "updated", body: data });
     })
@@ -71,7 +81,8 @@ exports.updateReport = (req, res, next) => {
 exports.deleteReport = (req, res, next) => {
   errorHandeler(req);
 
-  ReportContentModel.deleteOne({ _id: req.body._id })
+  ReportContentModel.find({ account: req.user._id })
+    .deleteOne({ _id: req.body._id })
     .then((data) => {
       res.status(200).json({ data: "deleted", body: data });
     })

@@ -9,9 +9,14 @@ const schema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    counter : {
+      type: Number,
+      default: 0
+    }
   },
+  { timestamps: { createdAt: 'created_at' } },
   { _id: false }
 );
 
-schema.plugin(autoIncrement, { id: "report_list", inc_field: "_id" });
+schema.plugin(autoIncrement, { id: "report_list-auto-increament", inc_field: "_id" });
 module.exports = mongoose.model("report_list", schema);

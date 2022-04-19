@@ -29,3 +29,60 @@ whitout {dest: "images"}
   path: 'E:\\Shakwa\\reportFiles\\4-18-2022-screencapture-127-0-0-1-5501-home-html-2022-04-12-21_49_25.png',
   size: 408476
 }
+
+
+{
+  address: { city: 'man', street: 's', building: 1 },
+  _id: 5,
+  email: 'alaa4@gmail.com',
+  name: 'alaa',
+  password: '$2b$15$2wTYpVQwJYKXNuF7rNRRre4otU5O0hek9h4z6tdOjEI.dizbdvDE2',
+  report: [],
+  __v: 0
+}
+
+
+
+ReportContentModel.find({})
+.populate("type_id")
+.then((data) => {
+  // if(req.user._id == data.account){
+    // return res.status(200).json({ message: "Reports", data });
+  // }
+  // console.log(data)
+  data.map((d) => {
+    // console.log(d.account)
+    console.lo
+    if(req.user._id === data.account){
+      console.log("Aa")
+      res.status(200).json({ message: "Reports", data });
+    }
+  })
+})
+.catch((err) => next(err));
+
+
+after
+{
+  address: { city: 'man', street: 's', building: 1 },
+  _id: 5,
+  email: 'alaa4@gmail.com',
+  name: 'alaa',
+  password: '$2b$15$2wTYpVQwJYKXNuF7rNRRre4otU5O0hek9h4z6tdOjEI.dizbdvDE2',
+  report: [],
+  __v: 0
+}
+
+
+AccountModel.updateOne(
+  { _id: req.user._id },
+  {
+    $set: {
+      report: data._id,
+    },
+  }
+
+  console.log(data)
+  // console.log(data._id)
+  // data.report.push(data._id)
+);
